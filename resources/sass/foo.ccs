@@ -1,0 +1,3 @@
+.hoge p{
+  color:red;
+}
