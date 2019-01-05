@@ -6,6 +6,10 @@
     <p>href="/sorani001/public/css/foo.css"</p>
     <p>src="/sorani001/public/js/foo.js"</p>
   </div>
+
+  <div id="app">
+    <my-component></my-component>
+  </div>
 </body>
 
 <script src="{{ mix('js/foo.js') }}"></script>
