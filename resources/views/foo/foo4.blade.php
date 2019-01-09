@@ -3,12 +3,18 @@
   <div class="threads">
     <h1>{{ $title }}</h1>
     <p>{{ $body }}</p>
-    <p>href="/sorani001/public/css/foo.css"</p>
-    <p>src="/sorani001/public/js/foo.js"</p>
+    <p>href="{{ mix('css/foo.css') }}"</p>
+    <p>src="{{ mix('js/foo.js') }}"</p>
   </div>
 
   <div id="app">
-    <my-component></my-component>
+    <comp-child v-for="item in list"
+      v-bind:key="item.id"
+      v-bind:name="item.name"
+      v-bind:hp="item.hp"
+    >
+    </comp-child>
+    <comp-child2 v-on:childs-event="parentsMethods"></comp-child2>
   </div>
 </body>
 
