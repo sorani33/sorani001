@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class user extends Model
 {
-    public function passport() {
-      return $this->hasOne(passport::class);
+    public function mobile() {
+      return $this->hasMany(mobile::class);
     }
 }
