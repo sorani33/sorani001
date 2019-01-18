@@ -21,3 +21,5 @@ Route::get('foo/foo3', 'FooController@foo3');
 Route::get('foo/foo4', 'FooController@foo4');
 
 Route::get('test', 'HelloController@index');
+
+Route::get('student/list','StudentController@getIndex');
