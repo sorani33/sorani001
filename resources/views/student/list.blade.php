@@ -10,8 +10,10 @@
 
 <body>
     <div class="container">
+<!-- ここから -->
        <div class="page-header" style="margin-top:-30px;padding-bottom:0px;">
          <h1><small>受講生一覧</small></h1>
+         <a href="new" class="btn btn-primary btn-sm">新規追加</a>
        </div>
         <table class="table table-striped table-hover">
             <thead>
@@ -37,6 +39,8 @@
         </table>
      <!-- page control -->
      {!! $students->render() !!}
+
+     <!-- ここまで -->
     </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
