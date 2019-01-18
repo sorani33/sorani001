@@ -64,4 +64,13 @@ class StudentController extends Controller
         return redirect()->to('student/list');
     }
 
+
+
+    public function delete($id){
+        $student = Student::find($id);
+        $student->delete();
+        return redirect()->to('student/list');
+    }
+
+
 }

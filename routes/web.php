@@ -29,10 +29,8 @@ Route::group(['prefix' => 'student'], function () {
     Route::get('new', 'StudentController@new_index'); //入力
     Route::patch('new','StudentController@new_confirm'); //確認
     Route::post('new', 'StudentController@new_finish'); //完了
-});
-
-Route::group(['prefix' => 'student'], function () {
-  Route::get('edit/{id}/', 'StudentController@edit_index'); //編集
-  Route::patch('edit/{id}/','StudentController@edit_confirm'); //確認
-  Route::post('edit/{id}/', 'StudentController@edit_finish'); //完了
+    Route::get('edit/{id}/', 'StudentController@edit_index'); //編集
+    Route::patch('edit/{id}/','StudentController@edit_confirm'); //確認
+    Route::post('edit/{id}/', 'StudentController@edit_finish'); //完了
+    Route::post('delete/{id}/', 'StudentController@delete'); //削除
 });
