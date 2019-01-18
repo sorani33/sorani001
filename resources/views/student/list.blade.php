@@ -13,8 +13,23 @@
 <!-- ここから -->
        <div class="page-header" style="margin-top:-30px;padding-bottom:0px;">
          <h1><small>受講生一覧</small></h1>
-         <a href="new" class="btn btn-primary btn-sm">新規追加</a>
+         <div class="row" style="margin-bottom: 30px;">
+          <div class="col-sm-10" style="margin-bottom: 10px;">
+              <form method="get" action="" class="form-inline">
+              <div class="form-group">
+                 <input type="text" name="keyword" class="form-control" value="{{$keyword}}" placeholder="検索キーワード">
+              </div>
+              <input type="submit" value="検索" class="btn btn-info">
+              </form>
+          </div>
+          <div class="col-sm-2">
+              <a href="/student/new" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i> 新規登録</a>
+          </div>
+         </div>
+
        </div>
+
+
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
@@ -42,8 +57,7 @@
             </tbody>
         </table>
      <!-- page control -->
-     {!! $students->render() !!}
-
+     {!! $students->appends(['keyword'=>$keyword])->render()!!}}
      <!-- ここまで -->
     </div>
 

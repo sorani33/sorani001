@@ -8,11 +8,19 @@ use App\Student;
 class StudentController extends Controller
 {
     //
-    public function getIndex(){
+    public function getIndex(Request $request){
+        $keyword = $request->input('keyword');
+
         $query = Student::query();
+        if(isset($keyword)){
+            $query
+                ->where('email','like','%'.$keyword.'%')
+                ->orWhere('name','like','%'.$keyword.'%');
+        }
+
         // 全件取得 +ページネーション
         $students = $query->orderBy('id','desc')->paginate(10);
-        return view('student.list')->with('students',$students);
+        return view('student.list')->with('students',$students)->with('keyword',$keyword);
     }
 
     public function new_index(){
