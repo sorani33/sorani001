@@ -10,7 +10,11 @@ class UploaderController extends Controller
     //
     public function getIndex(){
         $uploader = Uploader::orderBy('created_at', 'desc')->paginate(5);
-        return view('uploader.index')->with('uploaders',$uploader);
+
+        $hash = array(
+            'uploaders' => $uploader,
+        );
+        return view('uploader.index')->with($hash);
     }
 
 
@@ -28,8 +32,8 @@ class UploaderController extends Controller
 
         // /public/img/tmpディレクトリ に画像データを格納する。
         // public_path関数は、publicディレクトリーの完全パスを返す。
-        $request->file('thum')->move(public_path() . "/img/tmp", $thum_name);
-        $thum = "/img/tmp/".$thum_name;
+        $request->file('thum')->move(public_path() . \Config::get('fpath.tmp'), $thum_name);
+        $thum = \Config::get('fpath.tmp').$thum_name;
 
         //  下記で{{ $thum }}　 {{ $username }}　で表示できる。  {{ $hash }}　とかはではない。
         $hash = array(
@@ -51,14 +55,14 @@ class UploaderController extends Controller
         $lastInsertedId = $uploader->id;
 
         // ディレクトリを作成
-        if (!file_exists(public_path() . "/img/" . $lastInsertedId)) {
-            mkdir(public_path() . "/img/" . $lastInsertedId, 0777);
+        if (!file_exists(public_path() . \Config::get('fpath.thum') . $lastInsertedId)) {
+            mkdir(public_path() . \Config::get('fpath.thum') . $lastInsertedId, 0777);
         }
 
         // 一時保存から本番の格納場所へ移動
         rename(
             public_path() . $request->thum,
-            public_path() . "/img/" . $lastInsertedId . "/thum." .pathinfo($request->thum, PATHINFO_EXTENSION)
+            public_path() . \Config::get('fpath.thum') . $lastInsertedId . "/thum." .pathinfo($request->thum, PATHINFO_EXTENSION)
         );
 
         return view('uploader.finish');

@@ -25,7 +25,9 @@ class UploaderRequest extends FormRequest
     {
       return [
           'username'=>'required',
-          'thum'=>'required|image',
+          // 'thum'=>'required|image',
+          'thum'=>'required|image|mimes:jpeg,png,jpg,gif|max:1024|dimensions:max_width=300,ratio=1/1',
+
       ];
     }
 
@@ -34,7 +36,10 @@ class UploaderRequest extends FormRequest
     {
       return [
           "required" => "必須項目です。",
-          "image" => "指定されたファイルが画像(jpg、png、bmp、gif、svg)ではありません。",
+          "image" => "指定されたファイルが画像ではありません。",
+          "mines" => "指定された拡張子（PNG/JPG/GIF）ではありません。",
+          "max" => "１Ｍを超えています。",
+          "dimensions" => "画像の比率は1：1で横は最大300pxです。",
       ];
     }
 }

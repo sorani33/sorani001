@@ -27,6 +27,7 @@
             <div class="form-group ">
                 <label class="col-sm-4 control-label" for="thum">サムネイル画像<br>（150×150）<br>PNG／JPG／GIF 可：</label>
                 <div class="col-sm-8">
+                  @if($errors->has('thum'))<span class="text-danger">{{ $errors->first('thum') }}</span> @endif
                     <input type="file" id="thum" name="thum" size="50" />
                 </div>
             </div>
@@ -49,7 +50,7 @@
                 <tr>
                     <td>{{$uploader->id}}</td>
                     <td>{{$uploader->username}}</td>
-                    <td><img src="/img/{{$uploader->id}}/thum.jpeg" width="150"></td>
+                    <td><img src="{{$uploader->pic_thum()}}" width="150"></td>
                 </tr>
                 @endforeach
             </tbody>
