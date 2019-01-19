@@ -24,6 +24,7 @@ Route::get('test', 'HelloController@index');
 
 Route::get('student/list','StudentController@getIndex');
 
+
 Route::group(['prefix' => 'student'], function () {
     Route::get('list', 'StudentController@getIndex'); //一覧
     Route::get('new', 'StudentController@new_index'); //入力
@@ -34,3 +35,8 @@ Route::group(['prefix' => 'student'], function () {
     Route::post('edit/{id}/', 'StudentController@edit_finish'); //完了
     Route::post('delete/{id}/', 'StudentController@delete'); //削除
 });
+
+
+Route::get('uploader','UploaderController@getIndex');
+Route::post('uploader/confirm','UploaderController@confirm');
+Route::post('uploader/finish','UploaderController@finish');

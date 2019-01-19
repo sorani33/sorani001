@@ -8,6 +8,33 @@
     <link href="/css/sticky-footer.css" rel="stylesheet" media="screen">
 </head>
 
+@if(Session::has('flashmessage'))
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script>
+  $(window).load(function() {
+  $('#modal_box').modal('show');
+  });
+</script>
+<!-- モーダルウィンドウの中身 -->
+<div class="modal fade" id="modal_box" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">受講生 APP</h4>
+            </div>
+            <div class="modal-body">
+                {{ session('flashmessage') }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+
 <body>
     <div class="container">
 <!-- ここから -->
@@ -57,7 +84,7 @@
             </tbody>
         </table>
      <!-- page control -->
-     {!! $students->appends(['keyword'=>$keyword])->render()!!}}
+     {!! $students->appends(['keyword'=>$keyword])->render()!!}
      <!-- ここまで -->
     </div>
 

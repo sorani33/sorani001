@@ -43,7 +43,7 @@ class StudentController extends Controller
         $student->save();
 
         //リダイレクト
-        return redirect()->to('student/list');
+        return redirect()->to('student/list')->with('flashmessage', '登録が完了いたしました。');
     }
 
 
@@ -69,7 +69,7 @@ class StudentController extends Controller
         $student->save();
 
         //リダイレクト
-        return redirect()->to('student/list');
+        return redirect()->to('student/list')->with('flashmessage', '更新が完了いたしました。');
     }
 
 
@@ -77,7 +77,7 @@ class StudentController extends Controller
     public function delete($id){
         $student = Student::find($id);
         $student->delete();
-        return redirect()->to('student/list');
+        return redirect()->to('student/list')->with('flashmessage', '削除が完了いたしました。');
     }
 
 
