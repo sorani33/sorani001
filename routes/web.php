@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('tagboard', 'TagBoardController@index');
+Route::post('tagboard', 'TagBoardController@submit');
+
+
 Route::get('/', function () {
     return view('welcome');
 });

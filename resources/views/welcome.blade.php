@@ -80,13 +80,13 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravelで作ったやつのリンク
+                    制作履歴
                 </div>
 
                 <div class="links">
                     <a href="/student/list">【crud、検索、ページャ】　</a>
                     <a href="/uploader">【アップロード】　</a>
-                    <a href="/test">工事中</a>
+                    <a href="/tagboard">【多対多】掲示板</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>
