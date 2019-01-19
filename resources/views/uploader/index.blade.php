@@ -54,7 +54,7 @@
                 @endforeach
             </tbody>
         </table>
-
+        {!! $uploaders->render()!!}
 <!-- ここまで -->
     </div>
 

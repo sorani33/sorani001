@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Uploader;
 
 class UploaderController extends Controller
 {
     //
     public function getIndex(){
-        $uploader = \App\Uploader::orderBy('created_at', 'desc')->paginate(5);
+        $uploader = Uploader::orderBy('created_at', 'desc')->paginate(5);
         return view('uploader.index')->with('uploaders',$uploader);
     }
 
@@ -21,11 +22,12 @@ class UploaderController extends Controller
         // echo uniqid("photo_");
         // //実行結果例：photo_58ddab7574ff3
 
-        // アップロードしたファイルの拡張子の取得
+        // アップロードしたファイルの拡張子の取得する。
         // $request->file('photo')->guessExtension()
         $thum_name = uniqid("THUM_") . "." . $request->file('thum')->guessExtension(); // TMPファイル名
 
         // /public/img/tmpディレクトリ に画像データを格納する。
+        // public_path関数は、publicディレクトリーの完全パスを返す。
         $request->file('thum')->move(public_path() . "/img/tmp", $thum_name);
         $thum = "/img/tmp/".$thum_name;
 
@@ -37,7 +39,6 @@ class UploaderController extends Controller
 
         return view('uploader.confirm')->with($hash);
     }
-
 
 
 

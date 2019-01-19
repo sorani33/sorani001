@@ -23,8 +23,18 @@ class UploaderRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+      return [
+          'username'=>'required',
+          'thum'=>'required|image',
+      ];
+    }
+
+
+    public function messages()
+    {
+      return [
+          "required" => "必須項目です。",
+          "image" => "指定されたファイルが画像(jpg、png、bmp、gif、svg)ではありません。",
+      ];
     }
 }
