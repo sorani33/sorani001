@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
-
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
@@ -81,12 +80,13 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Laravelで作ったやつのリンク
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
+                    <a href="/student/list">【crud、検索、ページャ】　</a>
+                    <a href="/uploader">【アップロード】　</a>
+                    <a href="/test">工事中</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>
