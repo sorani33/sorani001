@@ -89,8 +89,12 @@
                     <a href="/tagboard">【多対多】掲示板</a>
                     <a href="/put-data">【session】作成</a>
                     <a href="/list-data">【session】確認</a><br>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="/feat">ファザード等</a>
+                    <a href="https://github.com/laravel/laravel">準備中</a>
+                    <a href="https://github.com/laravel/laravel">準備中</a>
+                    <a href="https://github.com/laravel/laravel">準備中</a>
+                    <a href="https://github.com/laravel/laravel">準備中</a>
+                    <a href="https://github.com/laravel/laravel">準備中</a>
                 </div>
             </div>
         </div>
