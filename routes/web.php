@@ -12,12 +12,7 @@
 */
 
 
-// APIのURL以外のリクエストに対してはindexテンプレートを返す
-// 画面遷移はフロントエンドのVueRouterが制御する
-Route::get('/{any?}', function () {
-    return view('index');
-    }
-)->where('any', '.+');
+
 
 Route::get('/feat', 'FeatController@index01');
 
@@ -31,7 +26,7 @@ Route::get('tagboard', 'TagBoardController@index');
 Route::post('tagboard', 'TagBoardController@submit');
 
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
@@ -60,3 +55,11 @@ Route::group(['prefix' => 'student'], function () {
 Route::get('uploader','UploaderController@getIndex');
 Route::post('uploader/confirm','UploaderController@confirm');
 Route::post('uploader/finish','UploaderController@finish');
+
+
+// APIのURL以外のリクエストに対してはindexテンプレートを返す
+// 画面遷移はフロントエンドのVueRouterが制御する
+Route::get('/{any?}', function () {
+    return view('index');
+    }
+)->where('any', '.+');
