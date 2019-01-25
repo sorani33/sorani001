@@ -26,7 +26,13 @@ class TestEchoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      $this->app->bind('TestEcho', function(Application $app){
-        return new TestEchoHelper();
-      });    }
+        // $this->app->bind('TestEcho', function(Application $app){
+        //   return new TestEchoHelper();
+        // });
+
+        $this->app->bind( //サービスコンテナにバインド
+          'facadetest', // キー名
+          'App\Services\FacadeTest' // クラス名
+        );
+    }
 }
