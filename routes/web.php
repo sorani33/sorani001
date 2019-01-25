@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/feat', 'FeatController@index01');
+
 
 Route::get('/put-data', 'HelloController@index02');
 Route::get('/list-data', 'HelloController@index03');
