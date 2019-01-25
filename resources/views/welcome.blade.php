@@ -87,8 +87,8 @@
                     <a href="/student/list">【crud、検索、ページャ】　</a>
                     <a href="/uploader">【アップロード】　</a>
                     <a href="/tagboard">【多対多】掲示板</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
+                    <a href="/put-data">【session】作成</a>
+                    <a href="/list-data">【session】確認</a><br>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>

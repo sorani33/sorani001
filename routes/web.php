@@ -11,6 +11,11 @@
 |
 */
 
+Route::get('/put-data', 'HelloController@index02');
+Route::get('/list-data', 'HelloController@index03');
+
+
+
 Route::get('tagboard', 'TagBoardController@index');
 Route::post('tagboard', 'TagBoardController@submit');
 
