@@ -7,7 +7,7 @@ import Login from './pages/Login.vue'
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
-Vue.use(VueRouter)
+Vue.use(VueRouter)  //他ファイルで、this.$routerが使える。
 
 // パスとコンポーネントのマッピング
 const routes = [

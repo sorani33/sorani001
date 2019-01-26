@@ -53,9 +53,6 @@ export default {
   },
 
   methods: {
-    login () {
-      console.log(this.loginForm)
-    },
     async register () {
       // console.log(this.registerForm)
 
@@ -65,7 +62,6 @@ export default {
       // トップページに移動する
       this.$router.push('/')
     },
-
 
     async login () {
       // authストアのloginアクションを呼び出す
