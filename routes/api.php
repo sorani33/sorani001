@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+// ログアウト
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 // ログイン
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 // 会員登録
