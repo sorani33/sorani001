@@ -12,7 +12,14 @@
 */
 
 
+Route::get('/contact', 'ContactController@form');
+Route::post('/contact/confirm', 'ContactController@confirm');
+Route::post('/contact/process', 'ContactController@process');
 
+// 送信メール本文のプレビュー
+Route::get('sample/mailable/preview', function () {
+  return new App\Mail\SampleNotification();
+});
 
 Route::get('/feat', 'FeatController@index01');
 

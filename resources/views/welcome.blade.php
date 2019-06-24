@@ -90,10 +90,7 @@
                     <a href="/put-data">【session】作成</a>
                     <a href="/list-data">【session】確認</a><br>
                     <a href="/feat">ファザード等</a>
-                    <a href="https://github.com/laravel/laravel">準備中</a>
-                    <a href="https://github.com/laravel/laravel">準備中</a>
-                    <a href="https://github.com/laravel/laravel">準備中</a>
-                    <a href="https://github.com/laravel/laravel">準備中</a>
+                    <a href="/contact">キャストフォーム</a>
                     <a href="https://github.com/laravel/laravel">準備中</a>
                 </div>
             </div>
