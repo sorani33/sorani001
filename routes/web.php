@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/scraping', 'ScrapingController@index');
+Route::get('/scrapingtest', 'ScrapingController@test');
 
 
 Route::get('/contact', 'ContactController@form');
