@@ -31,17 +31,16 @@ class ScrapingController extends Controller
 
 
     public function index () {
-        $scrape_url_list = array( //配列でURLを送ると並列処理されます
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=4' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=5' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=6' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=7' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=8' ),
 
-        );
+        // $scrape_url_list = array( //配列でURLを送ると並列処理されます
+        //     htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
+        //     htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
+        //     htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
+        // );
+        $scrape_url_list = array();
+        for($i = 1; $i < config('bootstrap.urlcount'); $i++){
+            $scrape_url_list[] = htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page='.$i );
+        }
 
         // 正規表現を書く。
         $seikihyougen = '/<div class="itemBody"(.*?)<div class="itemHead"/s'; //20人取れないけど暫定。
@@ -131,7 +130,7 @@ class ScrapingController extends Controller
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
-dd($result);
+// dd($result);
             // // 記事詳細へ →二次開発へ。
             // $hoge = ScrapingDetail::index($scrape_content);
             // $fuga = ScrapingFromPersonalPage::index($hoge);
@@ -143,7 +142,7 @@ dd($result);
             $array = array("Windows", "Mac", "Linux");
             /* ファイルポインタをオープン */
             $file = fopen("/var/www/html/sorani001/test.csv", "w");
-            foreach($scrape_content as $content){
+            foreach($result as $content){
                 fputcsv($file, $content);
             }
             /* ファイルポインタをクローズ */
@@ -167,7 +166,7 @@ dd($result);
                     $clickCount = $price = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
                 }
                 //一定以上クリックされてない場合は、処理を飛ばす。
-                if($clickCount < 100){
+                if($clickCount < config('bootstrap.clickcount')){
                     continue;
                 }
 
