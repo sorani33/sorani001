@@ -32,10 +32,14 @@ class ScrapingController extends Controller
 
     public function index () {
         $scrape_url_list = array( //配列でURLを送ると並列処理されます
-            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
             htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
             htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
-            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=4' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=4' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=5' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=6' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=7' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=8' ),
 
         );
 
@@ -48,6 +52,7 @@ class ScrapingController extends Controller
     function scraping_content($scrape_url_list, $seikihyougen){
 
         $TIMEOUT = 40;
+        $result= array();
         // 1) 準備
         // 複数の cURL ハンドルを並列で実行する。
         $mh = curl_multi_init();
@@ -119,15 +124,14 @@ class ScrapingController extends Controller
 
                             preg_match_all($pattern, $response, $match, PREG_SET_ORDER);
                             $count = count($match);
-
                             $scrape_content = $this->castList($match, $count);
-
+                            $result = array_merge($result, $scrape_content);
                         }// else
                         curl_multi_remove_handle($mh, $raised['handle']);
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
-
+dd($result);
             // // 記事詳細へ →二次開発へ。
             // $hoge = ScrapingDetail::index($scrape_content);
             // $fuga = ScrapingFromPersonalPage::index($hoge);
@@ -137,14 +141,11 @@ class ScrapingController extends Controller
 
             /* 配列の作成 */
             $array = array("Windows", "Mac", "Linux");
-
             /* ファイルポインタをオープン */
             $file = fopen("/var/www/html/sorani001/test.csv", "w");
-
             foreach($scrape_content as $content){
                 fputcsv($file, $content);
             }
-
             /* ファイルポインタをクローズ */
             fclose($file);
         }
@@ -161,7 +162,10 @@ class ScrapingController extends Controller
                 // 元動画サイトとアクセス数の格納処理をする。
                 $quoteAndAccessResult = $this->quoteAndAccess($match[$j][0]);
                 // クリック数を数字の型に変更して、
-                $clickCount = $price = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
+                $clickCount = 0 ;
+                if(isset($quoteAndAccessResult[2])){
+                    $clickCount = $price = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
+                }
                 //一定以上クリックされてない場合は、処理を飛ばす。
                 if($clickCount < 100){
                     continue;
@@ -175,8 +179,12 @@ class ScrapingController extends Controller
                 // 格納する。
                 $hinban[$j][] = date("Y/m/d H:i:s");
                 $hinban[$j][] = $quoteAndAccessResult[0];
-                $hinban[$j][] = $quoteAndAccessResult[2];
-                $hinban[$j][] = $movieTime[1];
+                if(isset($quoteAndAccessResult[2])){
+                    $hinban[$j][] = $quoteAndAccessResult[2];
+                }
+                if(isset($movieTime[1])){
+                    $hinban[$j][] = $movieTime[1];
+                }
                 $hinban[$j][] = $castList[1];
                 array_push($scrape_content, $hinban[$j]);
             } // for $j
