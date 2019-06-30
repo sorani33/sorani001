@@ -138,7 +138,9 @@ class ScrapingController extends Controller
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
-            dd($scrape_content);
+            $hoge = Scraping::hoge("aaaa");
+            // $hoge = Scraping::fuga("aaaa");
+            dd($hoge);
             echo 'finished', PHP_EOL;
             curl_multi_close($mh);
             return $scrape_content;
