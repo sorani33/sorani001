@@ -6,51 +6,15 @@ use Illuminate\Http\Request;
 use App\Scraping;
 
 
-class ScrapingController extends Controller
+class ScrapingFromPersonalPageController extends Controller
 {
-    public function test () {
-        // dd("aaa");
-        // cURLについてはこちら　https://www.sejuku.net/blog/26754
-        // https://reffect.co.jp/php/perfect_understanding_curl_in_php
-
-        $url = "https://www.sejuku.net/blog/";
-
-        //cURLセッションを初期化する
-        $ch = curl_init();
-
-        //URLとオプションを指定する
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        //URLの情報を取得する
-        $res =  curl_exec($ch);
-
-        //結果を表示する
-        var_dump($res);
-
-        // //セッションを終了する
-        // curl_close($conn);
-    }
-
-
     public function index () {
         $scrape_url_list = array( //配列でURLを送ると並列処理されます
-            // htmlspecialchars_decode( 'http://s.miru2.jp/snapshot/' ),
-            // htmlspecialchars_decode( 'http://s.miru2.jp/snapshot/page:2' )
-
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
-            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' )
-
+            htmlspecialchars_decode( 'http://pinklolix.com/page/7072/' ),
         );
 
-        // 正規表現を書く。
-        // 参考　https://qiita.com/kanaxx/items/daca1c57e48e0a8d674a
-        // $seikihyougen = '/class="data"/';
-        // $seikihyougen = '/<p class="data"(.*?)<\/p>/s'; //みるみる、class="data"のみ取得できた。
-        // $seikihyougen = '/<div class="syame_nikki_leftbox"(.*?)<\/div>/s'; //みるみる、各女性情報を取得できた。
-        // $seikihyougen = '/ class="itemBody"/s'; //一旦クラスのみ。
-        // $seikihyougen = '/<div class="itemBody"(.*?)<\/div>/s'; //途中で切れてしまう。
-        $seikihyougen = '/<div class="itemBody"(.*?)<div class="itemHead"/s'; //20人取れないけど暫定。
+        // s最短マッチはこちら。https://cloned.hatenablog.com/entries/2006/11/10#c
+        $seikihyougen = '/http:\/\/jp\.pornhub.*?"/'; //20人取れないけど暫定。
 
         $scrape_content = $this->scraping_content($scrape_url_list, $seikihyougen);
     }
@@ -126,12 +90,16 @@ class ScrapingController extends Controller
                         } else {
                             //正常にレスポンスを取得する
                             $pattern = "$seikihyougen";
+                            // dd($response);
                             $match = array();
 
                             preg_match_all($pattern, $response, $match, PREG_SET_ORDER);
+                            dd($match);
                             $count = count($match);
 
                             $scrape_content = $this->castList($match, $count);
+                            dd($scrape_content);
+
 
                         }// else
                         curl_multi_remove_handle($mh, $raised['handle']);
@@ -148,68 +116,30 @@ class ScrapingController extends Controller
         function castList($match, $count){
             $scrape_content = array ();
             for ($j = 0; $j< $count; $j++) {
-                // 元動画サイトとアクセス数の格納処理をする。
-                $quoteAndAccessResult = $this->quoteAndAccess($match[$j][0]);
-                // クリック数を数字の型に変更して、
-                $clickCount = $price = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
-                //一定以上クリックされてない場合は、処理を飛ばす。
-                if($clickCount < 100){
-                    continue;
-                }
-
-                // 再生時間の格納処理をする。
-                $movieTime = $this->movieTime($match[$j][0]);
                 // リンク先を追って、URLを表示させる。
                 $castList = $this->castListUrl($match[$j][0]);
 
                 // 格納する。
-                $hinban[$j][] = date("Y/m/d H:i:s");
-                $hinban[$j][] = $quoteAndAccessResult[0];
-                $hinban[$j][] = $quoteAndAccessResult[2];
-                $hinban[$j][] = $movieTime[1];
                 $hinban[$j][] = $castList[1];
                 array_push($scrape_content, $hinban[$j]);
             } // for $j
             return $scrape_content;
         }
 
+
+
         function castListUrl($match){
             preg_match(
-                '/<div class="itemImage">(.*?)<\/div>/s',
+                '/<div class="gotoBlog">(.*?)<\/div>/s',
                 $match,
                 $castList
             );
+
             // htmlのaタグから、リンクと文字を抜き出す
-            preg_match("|<a href=\"(.*?)\".*?>(.*?)|mis",$castList[0],$matches);
+            preg_match("|<a href=\"(.*?)\".*?>(.*?)|mis",$castList[1],$matches);
+
             return $matches;
-        }
 
-
-        // 元動画サイトとアクセス数の格納処理をする。
-        function quoteAndAccess ($match) {
-            preg_match(
-                '/<div class="itemInfo">(.*?)<\/div>/s',
-                $match,
-                $quoteAndAccess
-            );
-            // htmlタグを除去する。
-            $quoteAndAccessTagExclusion = strip_tags($quoteAndAccess[0], '');
-            // 複数スペースを１つのスペースにする。
-            $quoteAndAccessTagExclusion = preg_replace("/\s+/", " ", trim($quoteAndAccessTagExclusion));
-            // 変数として格納する。
-            $quoteAndAccessResult = explode(' ',$quoteAndAccessTagExclusion);
-            return $quoteAndAccessResult;
-        }
-
-
-        // 再生時間の格納処理をする。
-        function movieTime ($match) {
-            preg_match(
-                '/<span class="movieTime">(.*?)<\/span>/s',
-                $match,
-                $movieTime
-            );
-            return $movieTime;
         }
 
 }
