@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Scraping;
+use App\ScrapingDetail;
+use App\ScrapingFromPersonalPage;
 
 
 class ScrapingController extends Controller
@@ -39,7 +40,9 @@ class ScrapingController extends Controller
             // htmlspecialchars_decode( 'http://s.miru2.jp/snapshot/page:2' )
 
             htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
-            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' )
+            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
+            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
+            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=4' ),
 
         );
 
@@ -116,7 +119,7 @@ class ScrapingController extends Controller
                 do if ($raised = curl_multi_info_read($mh, $remains)) {
                         //変化のあったcurlハンドラを取得する
                         $info = curl_getinfo($raised['handle']);
-                        echo "$info[url]: $info[http_code]: $info[total_time]\n";
+                        // echo "$info[url]: $info[http_code]: $info[total_time]\n";
 
                         // URL本体が下記に入る。
                         $response = curl_multi_getcontent($raised['handle']);
@@ -138,17 +141,38 @@ class ScrapingController extends Controller
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
-            $hoge = Scraping::hoge("aaaa");
-            // $hoge = Scraping::fuga("aaaa");
-            dd($hoge);
-            echo 'finished', PHP_EOL;
+
+            // dd($scrape_content);
+            // // 記事詳細へ
+            // $hoge = ScrapingDetail::index($scrape_content);
+            // $fuga = ScrapingFromPersonalPage::index($hoge);
+
+            echo 'finished01', PHP_EOL;
             curl_multi_close($mh);
-            return $scrape_content;
+
+            /* 配列の作成 */
+            $array = array("Windows", "Mac", "Linux");
+
+            /* ファイルポインタをオープン */
+            $file = fopen("/var/www/html/sorani001/test.csv", "w");
+
+            foreach($scrape_content as $content){
+                fputcsv($file, $content);
+            }
+
+            /* ファイルポインタをクローズ */
+            fclose($file);
         }
+
+
+
+
+
 
         // ここから関数
         function castList($match, $count){
             $scrape_content = array ();
+            dd($match);
             for ($j = 0; $j< $count; $j++) {
                 // 元動画サイトとアクセス数の格納処理をする。
                 $quoteAndAccessResult = $this->quoteAndAccess($match[$j][0]);
