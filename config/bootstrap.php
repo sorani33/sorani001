@@ -1,15 +1,16 @@
 <?php
 return [
 
+    // 最低クリック回数
     'clickcount' => 300,
-    'urlcount' => 4,
 
-    'DIRECTRY_NAME' => ['/aaa', '/bbb', '/ccc'],
+    // 動画の最長再生時間
+    'movietime' => 40,
 
-    'APP_SETTING' => [
-        'user' => 'hogehoge',
-        'password' => '123456'
-    ],
+    // エロタレストのページ数
+    'urlcount' => 10,
+
 ];
 
-// config('bootstrap.click'); // みかん
+// 呼び出し方
+// config('bootstrap.urlcount'); // 10

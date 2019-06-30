@@ -146,6 +146,7 @@ class ScrapingController extends Controller
             for($i = 0; $i < $resultCount; $i++){
                 $result[$i][] = $detailUrlTotalResult[$i][0];
             }
+            dd($result);
             /* ファイルポインタをオープン */
             $file = fopen("/var/www/html/sorani001/test.csv", "w");
             foreach($result as $content){
@@ -169,7 +170,7 @@ class ScrapingController extends Controller
                 // クリック数を数字の型に変更して、
                 $clickCount = 0 ;
                 if(isset($quoteAndAccessResult[2])){
-                    $clickCount = $price = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
+                    $clickCount = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
                 }
                 //一定以上クリックされてない場合は、処理を飛ばす。
                 if($clickCount < config('bootstrap.clickcount')){
@@ -178,9 +179,16 @@ class ScrapingController extends Controller
 
                 // 再生時間の格納処理をする。
                 $movieTime = $this->movieTime($match[$j][0]);
+                if(isset($movieTime[1])){
+                    $clickCountMovieTime = preg_replace('/[^0-9]/', '', $movieTime[1]);
+                }
+                //一定以上クリックされてない場合は、処理を飛ばす。
+                if($clickCountMovieTime > config('bootstrap.movietime')){
+                    continue;
+                }
+
                 // リンク先を追って、URLを表示させる。
                 $castList = $this->castListUrl($match[$j][0]);
-
                 // 格納する。
                 $hinban[$j][] = date("Y/m/d H:i:s");
                 $hinban[$j][] = $quoteAndAccessResult[0];
