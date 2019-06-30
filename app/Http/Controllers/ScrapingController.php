@@ -10,10 +10,6 @@ use App\ScrapingFromPersonalPage;
 class ScrapingController extends Controller
 {
     public function test () {
-        // dd("aaa");
-        // cURLについてはこちら　https://www.sejuku.net/blog/26754
-        // https://reffect.co.jp/php/perfect_understanding_curl_in_php
-
         $url = "https://www.sejuku.net/blog/";
 
         //cURLセッションを初期化する
@@ -36,25 +32,15 @@ class ScrapingController extends Controller
 
     public function index () {
         $scrape_url_list = array( //配列でURLを送ると並列処理されます
-            // htmlspecialchars_decode( 'http://s.miru2.jp/snapshot/' ),
-            // htmlspecialchars_decode( 'http://s.miru2.jp/snapshot/page:2' )
-
-            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
-            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
-            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
+            // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
             // htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=4' ),
 
         );
 
         // 正規表現を書く。
-        // 参考　https://qiita.com/kanaxx/items/daca1c57e48e0a8d674a
-        // $seikihyougen = '/class="data"/';
-        // $seikihyougen = '/<p class="data"(.*?)<\/p>/s'; //みるみる、class="data"のみ取得できた。
-        // $seikihyougen = '/<div class="syame_nikki_leftbox"(.*?)<\/div>/s'; //みるみる、各女性情報を取得できた。
-        // $seikihyougen = '/ class="itemBody"/s'; //一旦クラスのみ。
-        // $seikihyougen = '/<div class="itemBody"(.*?)<\/div>/s'; //途中で切れてしまう。
         $seikihyougen = '/<div class="itemBody"(.*?)<div class="itemHead"/s'; //20人取れないけど暫定。
-
         $scrape_content = $this->scraping_content($scrape_url_list, $seikihyougen);
     }
 
@@ -142,8 +128,7 @@ class ScrapingController extends Controller
                     } while ($remains);
             } while ($running);
 
-            // dd($scrape_content);
-            // // 記事詳細へ
+            // // 記事詳細へ →二次開発へ。
             // $hoge = ScrapingDetail::index($scrape_content);
             // $fuga = ScrapingFromPersonalPage::index($hoge);
 
@@ -172,7 +157,6 @@ class ScrapingController extends Controller
         // ここから関数
         function castList($match, $count){
             $scrape_content = array ();
-            dd($match);
             for ($j = 0; $j< $count; $j++) {
                 // 元動画サイトとアクセス数の格納処理をする。
                 $quoteAndAccessResult = $this->quoteAndAccess($match[$j][0]);
