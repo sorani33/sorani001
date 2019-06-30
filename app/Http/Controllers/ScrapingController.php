@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ScrapingDetail;
 use App\ScrapingFromPersonalPage;
+use App\Http\Controller\ScrapingDetailController;
 
 
 class ScrapingController extends Controller
@@ -31,7 +32,6 @@ class ScrapingController extends Controller
 
 
     public function index () {
-
         // $scrape_url_list = array( //配列でURLを送ると並列処理されます
         //     htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=1' ),
         //     htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=2' ),
@@ -41,6 +41,8 @@ class ScrapingController extends Controller
         for($i = 1; $i < config('bootstrap.urlcount'); $i++){
             $scrape_url_list[] = htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page='.$i );
         }
+
+        // dd(ScrapingDetail::index($scrape_url_list));
 
         // 正規表現を書く。
         $seikihyougen = '/<div class="itemBody"(.*?)<div class="itemHead"/s'; //20人取れないけど暫定。
@@ -130,16 +132,20 @@ class ScrapingController extends Controller
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
-// dd($result);
-            // // 記事詳細へ →二次開発へ。
-            // $hoge = ScrapingDetail::index($scrape_content);
-            // $fuga = ScrapingFromPersonalPage::index($hoge);
 
             echo 'finished01', PHP_EOL;
             curl_multi_close($mh);
 
-            /* 配列の作成 */
-            $array = array("Windows", "Mac", "Linux");
+            $detailUrlTotal = array();
+            foreach($result as $detailUrl){
+                $detailUrlTotal[] = $detailUrl[4];
+            }
+            $resultCount = count($result);
+            $detailUrlTotalResult = ScrapingDetail::index($detailUrlTotal);
+
+            for($i = 0; $i < $resultCount; $i++){
+                $result[$i][] = $detailUrlTotalResult[$i][0];
+            }
             /* ファイルポインタをオープン */
             $file = fopen("/var/www/html/sorani001/test.csv", "w");
             foreach($result as $content){

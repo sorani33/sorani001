@@ -6,27 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class ScrapingDetail extends Model
 {
-    public static function index ($scrape_content) {
+    public static function index ($scrape_content = null) {
         $scrape_url_list = array ();
         foreach($scrape_content as $data){
             array_push($scrape_url_list, $data[4]);
         }
+        // dd($scrape_content);
         // $scrape_url_list = array( //配列でURLを送ると並列処理されます
         //     htmlspecialchars_decode( 'https://movie.eroterest.net/page/17192995/' ),
         // );
 
         // 正規表現を書く。
         $seikihyougen = '/<div class="itemFootReport"(.*?)<div class="kokArea"/s'; //20人取れないけど暫定。
-        // dd($scrape_url_list);
 
-        $scrape_content = self::scraping_content($scrape_url_list, $seikihyougen);
+        $scrape_content = self::scraping_content($scrape_content, $seikihyougen);
         return $scrape_content;
     }
 
 
     public static function scraping_content ($scrape_url_list, $seikihyougen) {
-        // dd($match."www");
+
         $TIMEOUT = 40;
+        $result= array();
         // 1) 準備
         // 複数の cURL ハンドルを並列で実行する。
         $mh = curl_multi_init();
@@ -67,16 +68,18 @@ class ScrapingDetail extends Model
          *  - どれか一つレスポンスが返ってきたらselectがsleepを中断して何か数字を返す。
          *
          */
-        do switch (curl_multi_select($mh, $TIMEOUT)) {
-            case -1: //selectに失敗
-                usleep(5);
-                do {
-                    $stat = curl_multi_exec($mh, $running);
 
-                } while ($stat === CURLM_CALL_MULTI_PERFORM);
-                continue 2;
-            case 0:  //タイムアウト
-                continue 2;
+        do switch (curl_multi_select($mh, $TIMEOUT)) {
+            // case -1: //selectに失敗
+            //     usleep(5);
+            //     do {
+            //         $stat = curl_multi_exec($mh, $running);
+            //         dd(CURLM_CALL_MULTI_PERFORM);
+            //
+            //     } while ($stat === 0);
+            //     continue 2;
+            // case 0:  //タイムアウト
+            //     continue 2;
             default: //どれかが成功 or 失敗した
                 do {
                     $stat = curl_multi_exec($mh, $running);
@@ -98,18 +101,17 @@ class ScrapingDetail extends Model
 
                             preg_match_all($pattern, $response, $match, PREG_SET_ORDER);
                             $count = count($match);
-
                             $scrape_content = self::castList($match, $count);
+                            $result = array_merge($result, $scrape_content);
                         }// else
                         curl_multi_remove_handle($mh, $raised['handle']);
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
             // 記事詳細へ
-// dd($pattern);
             echo 'finished02', PHP_EOL;
             curl_multi_close($mh);
-            return $scrape_content;
+            return $result;
         }
 
 

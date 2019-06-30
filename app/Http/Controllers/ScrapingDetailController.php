@@ -11,8 +11,19 @@ class ScrapingDetailController extends Controller
     public function index () {
         $scrape_url_list = array( //配列でURLを送ると並列処理されます
             // htmlspecialchars_decode( 'https://movie.eroterest.net/page/17192995/' ),
-            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17256659/' ),
-        );
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17265210/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17264169/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263479/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17262381/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263129/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263461/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17262338/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263563/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263430/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17260024/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263428/' ),
+            htmlspecialchars_decode( 'https://movie.eroterest.net/page/17263125/' ),
+       );
 
         // 正規表現を書く。
         $seikihyougen = '/<div class="itemFootReport"(.*?)<div class="kokArea"/s'; //20人取れないけど暫定。
@@ -24,6 +35,8 @@ class ScrapingDetailController extends Controller
     function scraping_content($scrape_url_list, $seikihyougen){
 
         $TIMEOUT = 40;
+        $result= array();
+
         // 1) 準備
         // 複数の cURL ハンドルを並列で実行する。
         $mh = curl_multi_init();
@@ -81,7 +94,7 @@ class ScrapingDetailController extends Controller
                 do if ($raised = curl_multi_info_read($mh, $remains)) {
                         //変化のあったcurlハンドラを取得する
                         $info = curl_getinfo($raised['handle']);
-                        echo "$info[url]: $info[http_code]: $info[total_time]\n";
+                        // echo "$info[url]: $info[http_code]: $info[total_time]\n";
 
                         // URL本体が下記に入る。
                         $response = curl_multi_getcontent($raised['handle']);
@@ -95,9 +108,8 @@ class ScrapingDetailController extends Controller
 
                             preg_match_all($pattern, $response, $match, PREG_SET_ORDER);
                             $count = count($match);
-
                             $scrape_content = $this->castList($match, $count);
-                            dd($scrape_content);
+                            $result = array_merge($result, $scrape_content);
 
 
                         }// else
@@ -105,7 +117,7 @@ class ScrapingDetailController extends Controller
                         curl_close($raised['handle']);
                     } while ($remains);
             } while ($running);
-            dd($scrape_content);
+            dd($result);
             echo 'finished', PHP_EOL;
             curl_multi_close($mh);
             return $scrape_content;
