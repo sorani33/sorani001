@@ -142,8 +142,9 @@ class ScrapingDetail extends Model
             );
 
             // htmlのaタグから、リンクと文字を抜き出す
-            preg_match("|<a href=\"(.*?)\".*?>(.*?)|mis",$castList[1],$matches);
-
+            if(isset($castList[1])){
+                preg_match("|<a href=\"(.*?)\".*?>(.*?)|mis",$castList[1],$matches);
+            }
             return $matches;
 
         }

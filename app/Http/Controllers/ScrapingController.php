@@ -38,10 +38,14 @@ class ScrapingController extends Controller
         //     htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page=3' ),
         // );
         $scrape_url_list = array();
-        for($i = 1; $i < config('bootstrap.urlcount'); $i++){
+        $i =  config('bootstrap.buffer');
+        $ii =  config('bootstrap.urlcount') + config('bootstrap.buffer');
+        // dd($i);
+        for($i ; $i < $ii; $i++){
             $scrape_url_list[] = htmlspecialchars_decode( 'https://movie.eroterest.net/?word=&c=&page='.$i );
         }
 
+        // dd($scrape_url_list);
         // dd(ScrapingDetail::index($scrape_url_list));
 
         // 正規表現を書く。
@@ -146,7 +150,7 @@ class ScrapingController extends Controller
             for($i = 0; $i < $resultCount; $i++){
                 $result[$i][] = $detailUrlTotalResult[$i][0];
             }
-            dd($result);
+            // dd($result);
             /* ファイルポインタをオープン */
             $file = fopen("/var/www/html/sorani001/test.csv", "w");
             foreach($result as $content){
@@ -178,6 +182,7 @@ class ScrapingController extends Controller
                 }
 
                 // 再生時間の格納処理をする。
+                $movieTime = 0 ;
                 $movieTime = $this->movieTime($match[$j][0]);
                 if(isset($movieTime[1])){
                     $clickCountMovieTime = preg_replace('/[^0-9]/', '', $movieTime[1]);
