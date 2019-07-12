@@ -142,13 +142,17 @@ class ScrapingController extends Controller
 
             $detailUrlTotal = array();
             foreach($result as $detailUrl){
-                $detailUrlTotal[] = $detailUrl[4];
+                if(isset($detailUrl[4])){
+                    $detailUrlTotal[] = $detailUrl[4];
+                }
             }
             $resultCount = count($result);
             $detailUrlTotalResult = ScrapingDetail::index($detailUrlTotal);
 
             for($i = 0; $i < $resultCount; $i++){
-                $result[$i][] = $detailUrlTotalResult[$i][0];
+                if(isset($detailUrlTotalResult[$i][0])){
+                    $result[$i][] = $detailUrlTotalResult[$i][0];
+                }
             }
             // dd($result);
             /* ファイルポインタをオープン */
@@ -171,7 +175,13 @@ class ScrapingController extends Controller
             for ($j = 0; $j< $count; $j++) {
                 // 元動画サイトとアクセス数の格納処理をする。
                 $quoteAndAccessResult = $this->quoteAndAccess($match[$j][0]);
-                // クリック数を数字の型に変更して、
+
+                // //一定以上クリックされてない場合は、処理を飛ばす。
+                // if($quoteAndAccessResult[0] != config('bootstrap.source')){
+                //     continue;
+                // }
+
+                // クリック数を数字の型に変更する。
                 $clickCount = 0 ;
                 if(isset($quoteAndAccessResult[2])){
                     $clickCount = preg_replace('/[^0-9]/', '', $quoteAndAccessResult[2]);
@@ -183,6 +193,7 @@ class ScrapingController extends Controller
 
                 // 再生時間の格納処理をする。
                 $movieTime = 0 ;
+                $clickCountMovieTime = 0;
                 $movieTime = $this->movieTime($match[$j][0]);
                 if(isset($movieTime[1])){
                     $clickCountMovieTime = preg_replace('/[^0-9]/', '', $movieTime[1]);

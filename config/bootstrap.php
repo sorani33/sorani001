@@ -1,6 +1,9 @@
 <?php
 return [
 
+    // ソース元
+    'source' => "PornHub",
+
     // 最低クリック回数
     'clickcount' => 150,
 
@@ -8,10 +11,10 @@ return [
     'movietime' => 40,
 
     // エロタレストのページ数
-    'urlcount' => 5,
+    'urlcount' => 10,
 
     // エロタレストのページ数のバッファ
-    'buffer' => 9252,
+    'buffer' => 11252,
 ];
 
 // 呼び出し方
